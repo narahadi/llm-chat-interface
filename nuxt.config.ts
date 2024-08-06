@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ["@nuxtjs/tailwindcss"],
+  modules: ["@nuxtjs/tailwindcss", "nuxt-gtag"],
   nitro: {
     preset: 'bun'
   },
@@ -13,5 +13,8 @@ export default defineNuxtConfig({
     config: {
       darkMode: 'class'
     }
+  },
+  gtag: {
+    id: ''
   }
 })

@@ -17,6 +17,7 @@
     "add": "^2.0.6",
     "langchain": "^0.2.12",
     "nuxt": "^3.12.4",
+    "nuxt-gtag": "^2.1.0",
     "vue": "latest"
   }
 }
