@@ -10,6 +10,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 const STABILITY_API_KEY = process.env.STABILITY_API_KEY;
+const FAL_API_KEY = process.env.FAL_API_KEY
 
 async function generateStableDiffusionImage(prompt: string): Promise<string> {
     try {
@@ -55,6 +56,46 @@ async function generateStableDiffusionImage(prompt: string): Promise<string> {
 const imageGenerationSchema = z.object({
   prompt: z.string().describe("The text prompt to generate an image from."),
 });
+
+async function generateFalFluxImage(prompt: string): Promise<string> {
+  try {
+    const response = await $fetch<FalFluxResponse>(
+      'https://fal.run/fal-ai/flux-realism',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Key ${FAL_API_KEY}`,
+        },
+        body: {
+          prompt: prompt,
+          image_size: "landscape_4_3",
+          num_inference_steps: 28,
+          guidance_scale: 3.5,
+          num_images: 1,
+          enable_safety_checker: true,
+        },
+      }
+    );
+
+    if (response.images && response.images.length > 0) {
+      return response.images[0].url;
+    } else {
+      throw new Error('No image data received from Fal Flux API');
+    }
+  } catch (error) {
+    console.error('Error generating Fal Flux image:', error);
+    throw new Error('Failed to generate image with Fal Flux');
+  }
+}
+
+interface FalFluxResponse {
+  images: Array<{
+    url: string;
+    content_type: string;
+  }>;
+  prompt: string;
+}
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -119,6 +160,19 @@ export default defineEventHandler(async (event) => {
             );
             imageGenerator = generateStableDiffusionImage;
             break;
+      case 'fal-flux':
+        imageTool = tool(
+          async ({ prompt }) => {
+            return await generateFalFluxImage(prompt);
+          },
+          {
+            name: "fal-flux",
+            description: "Generate an image using Fal Flux Realism model",
+            schema: imageGenerationSchema,
+          }
+        );
+        imageGenerator = generateFalFluxImage;
+        break;
     default:
       throw new Error('Invalid image model selected');
   }

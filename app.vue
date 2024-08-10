@@ -83,6 +83,7 @@ const toggleDarkMode = () => {
             <select v-model="imageModel" class="mt-1 block w-full pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
               <option value="dall-e">DALL-E</option>
               <option value="stable-diffusion">Stable Diffusion</option>
+              <option value="fal-flux">FLUX Realism LoRA</option>
             </select>
           </label>
         </div>
