@@ -36,7 +36,6 @@ onMounted(() => {
         </button>
       </div>
 
-      <!-- Improved Mode Switcher -->
       <div class="mb-6">
         <div class="relative bg-gray-200 dark:bg-gray-700 rounded-full p-1 flex">
           <button
@@ -58,7 +57,7 @@ onMounted(() => {
         </div>
       </div>
 
-      <div class="flex-grow">
+      <div class="flex-grow overflow-hidden">
         <Chat v-if="currentMode === 'chat'" />
         <ArchGen v-if="currentMode === 'archGen'" />
         <ImageComparison v-if="currentMode === 'imageComparison'" />

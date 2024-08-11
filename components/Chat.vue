@@ -40,19 +40,15 @@ const sendMessage = async () => {
       }
     })
 
-    chatHistory.pop() // Remove loading message
+    chatHistory.pop()
     chatHistory.push({ role: 'assistant', content: response.message })
     
     if (response.image) {
-      chatHistory.push({ role: 'assistant', content: 'Generating image, please wait...', loading: true })
-      // Simulate a delay to show the loading message
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      chatHistory.pop() // Remove loading message
       chatHistory.push({ role: 'assistant', content: response.image, isImage: true })
     }
   } catch (error) {
     console.error('Error:', error)
-    chatHistory.pop() // Remove loading message
+    chatHistory.pop() 
     chatHistory.push({ role: 'assistant', content: 'Sorry, an error occurred.' })
   } finally {
     isLoading.value = false
@@ -95,7 +91,7 @@ const formatMessage = (message: string) => {
 
 <template>
   <div class="h-full flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-    <div class="p-2 bg-gray-100 dark:bg-gray-700">
+    <div class="p-2 bg-gray-200 dark:bg-gray-700">
       <div class="flex flex-row gap-2 text-xs">
         <div class="flex-1">
           <label class="block font-medium text-gray-700 dark:text-gray-300 mb-1">
